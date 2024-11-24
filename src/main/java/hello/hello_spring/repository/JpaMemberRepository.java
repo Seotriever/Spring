@@ -11,26 +11,35 @@ public class JpaMemberRepository implements MemberRepository {
     private final EntityManager em;
 
     public JpaMemberRepository(EntityManager em) {
-        this.em = em;.
+        this.em = em;
     }
 
     @Override
     public Member save(Member member) {
-        return null;
+        em.persist(member);
+        return member;
     }
 
     @Override
     public Optional<Member> findById(Long id) {
-        return Optional.empty();
+        Member member = em.find(Member.class, id);
+        return Optional.ofNullable(member); //pk 값이라 Optional.ofNullable 가능
     }
 
-    @Override
+    @Override       //pk가 아닌 값들은 query문 생성
     public Optional<Member> findByName(String name) {
-        return Optional.empty();
+        List<Member> result = em.createQuery("select m from Member m where m.name = :name", Member.class)
+                .setParameter("name", name)
+                .getResultList();
+        return result.stream().findAny();       // optional
     }
 
     @Override
     public List<Member> findAll() {
-        return null;
+//        em.createQuery("select m from Member m", Member.class)
+//                .getResultList();
+        List<Member> result = em.createQuery("select m from m", Member.class)
+                .getResultList();
+        return result;
     }
 }
