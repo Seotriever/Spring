@@ -38,7 +38,7 @@ public class JpaMemberRepository implements MemberRepository {
     public List<Member> findAll() {
 //        em.createQuery("select m from Member m", Member.class)
 //                .getResultList();
-        List<Member> result = em.createQuery("select m from m", Member.class)
+        List<Member> result = em.createQuery("select a from Member a", Member.class)
                 .getResultList();
         return result;
     }
